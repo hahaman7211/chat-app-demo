@@ -1,7 +1,5 @@
 package com.jay.chat_ai_backend;
 
-import com.jay.chat_ai_backend.conversations.ChatMessage;
-import com.jay.chat_ai_backend.conversations.Conversation;
 import com.jay.chat_ai_backend.conversations.ConversationDao;
 import com.jay.chat_ai_backend.profiles.Gender;
 import com.jay.chat_ai_backend.profiles.Profile;
@@ -10,10 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @SpringBootApplication
 public class ChatAiBackendApplication implements CommandLineRunner {
@@ -31,6 +25,9 @@ public class ChatAiBackendApplication implements CommandLineRunner {
 	public void run(String... args){
 		System.out.println("my chat app is running");
 
+		profileDao.deleteAll();
+		conversationDao.deleteAll();
+
 		Profile profile = new Profile(
 				"1",
 				"Jay",
@@ -43,17 +40,30 @@ public class ChatAiBackendApplication implements CommandLineRunner {
 				"my name is Jay"
 		);
 		profileDao.save(profile);
+
+		Profile profile2 = new Profile(
+				"2",
+				"Chieh",
+				"hahaman",
+				30,
+				"Taiwan",
+				Gender.MALE,
+				"guitarist",
+				"jay.jpg",
+				"my name is hahaman"
+		);
+		profileDao.save(profile2);
 		profileDao.findAll().forEach(System.out::println);
 
-		Conversation conversation = new Conversation(
-				"1",
-				profile.id(),
-				List.of(
-						new ChatMessage("hi", profile.id(), LocalDateTime.now()))
-		);
-
-		conversationDao.save(conversation);
-		conversationDao.findAll().forEach(System.out::println);
+//		Conversation conversation = new Conversation(
+//				"1",
+//				profile.id(),
+//				List.of(
+//						new ChatMessage("hi", profile.id(), LocalDateTime.now()))
+//		);
+//
+//		conversationDao.save(conversation);
+//		conversationDao.findAll().forEach(System.out::println);
 
 	}
 }
