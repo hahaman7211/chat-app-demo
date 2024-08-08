@@ -1,6 +1,6 @@
 package com.jay.chat_ai_backend;
 
-import com.jay.chat_ai_backend.conversations.CatMessage;
+import com.jay.chat_ai_backend.conversations.ChatMessage;
 import com.jay.chat_ai_backend.conversations.Conversation;
 import com.jay.chat_ai_backend.conversations.ConversationDao;
 import com.jay.chat_ai_backend.profiles.Gender;
@@ -49,7 +49,7 @@ public class ChatAiBackendApplication implements CommandLineRunner {
 				"1",
 				profile.id(),
 				List.of(
-						new CatMessage("hi", profile.id(), LocalDateTime.now()))
+						new ChatMessage("hi", profile.id(), LocalDateTime.now()))
 		);
 
 		conversationDao.save(conversation);
