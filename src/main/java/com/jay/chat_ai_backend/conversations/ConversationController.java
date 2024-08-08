@@ -1,7 +1,6 @@
 package com.jay.chat_ai_backend.conversations;
 
 import com.jay.chat_ai_backend.profiles.ProfileDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +13,14 @@ import java.util.UUID;
 @RestController
 public class ConversationController {
 
-    @Autowired
-    private ConversationDao conversationDao;
+    private final ConversationDao conversationDao;
 
-    @Autowired
-    private ProfileDao profileDao;
+    private final ProfileDao profileDao;
 
+    public ConversationController(ConversationDao conversationDao, ProfileDao profileDao) {
+        this.conversationDao = conversationDao;
+        this.profileDao = profileDao;
+    }
 
     @PostMapping("/conversion")
     public Conversation createNewConversation(@RequestBody createChatRequest request) {
