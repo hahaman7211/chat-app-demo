@@ -2,10 +2,7 @@ package com.jay.chat_ai_backend.conversations;
 
 import com.jay.chat_ai_backend.profiles.ProfileDao;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -41,14 +38,22 @@ public class ConversationController {
         return conversation;
     }
 
+    @GetMapping("/conversion/{conversationId}")
+    public Conversation getConversation(@PathVariable String conversationId) {
+
+        return conversationDao.findById(conversationId)
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "unable to find the conversation"));
+
+    }
+
     //add a new message to the given conversation
     @PostMapping("/conversion/{conversationId}")
     public Conversation addNewMessage(@PathVariable String conversationId, @RequestBody ChatMessage chatMessage) {
-        //check if the conversation id exist
+        //1. check if the conversation id exist
         Conversation conversation = conversationDao.findById(conversationId)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "unable to find the conversation"));
 
-        //check if the sender id( profile id) exist
+        //2. check if the sender id( profile id) exist
         profileDao.findById(chatMessage.senderId())
                 .orElseThrow( () ->
                         new ResponseStatusException(
@@ -56,12 +61,13 @@ public class ConversationController {
 
 
 
-        //create a new message for adding to the conversation
+        //3.create a new message for adding to the conversation
         ChatMessage newMessage = new ChatMessage(
                 chatMessage.messageText(),
                 chatMessage.senderId(),
                 LocalDateTime.now()
         );
+        //4. save the message to conversation
         conversation.message().add(newMessage);
         conversationDao.save(conversation);
 
